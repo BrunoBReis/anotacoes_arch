@@ -1,0 +1,5 @@
+OBJETIVO
+	encontrar os comandos e modificacoes mais uties para o vim 
+---
+:Ex -> entrar no modo de explorador do vim
+:nowlsearch -> desliga o whighlight serach

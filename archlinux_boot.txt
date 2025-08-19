@@ -1,0 +1,93 @@
+Bootar o pendrive
+	(atualizar no futuro)
+---
+Ambiente de Boot
+	# localectl list-keymaps
+		lista todos os layouts de teclados que podem ser usados para a instalacao no boot 
+	# loadkeys <lang>
+		seleciona o layout lang mas o dado nao eh persistente
+	# setfont <font>
+		seleciona a fonte mas o dado nao eh persistente. Para identificar quais sao as fontes disponiveis basta ler o manual do setfont.
+	# cat /sys/firmware/efi/fw_plataform_size
+		verifica qual eh o UEFI (64 ou 32)
+	# ip link || ip address show || ip a
+		ver os dados do wlan0 (qual eh a placa de rede do computador)
+	# iwctl
+		entra no modo de configuracao de internet por iwd
+	# [iwd] device list
+		mostra os dados da placa de rede. Se tiver com a placa desligada (Powered off): # [iwd] device <name> set-property Powered on
+	# [iwd] station <name> scan 
+		permite que possa ser utilizado o proximo comando  
+	# [iwd] station <name> get-networks 
+		comando que lista as internets disponiveis
+	# [iwd] station <name> connect <SSID>
+		conectando para a rede domestica
+	# [iwd] station <name> show
+		mostra o status da conexao
+	OBS: o ip eh configurado automaticamente pelo systemd-networkd e systemd-resolved com o ip dinamico pelo DHCP. O comando ping google.com serve para verificar exatamente isso.
+	# timedatectl
+		comando para arrumar o timezone. Eh necessario ver o man timedateclt para mais informacoes
+	# timedatectl list-timezone
+		comando para listar todos os timezones  
+	# timedatectl set-timezone <time_zone>
+		define o time zone
+	# fdisk -l
+		mostra todos os discos do computador
+	OBS: caso o disco que ser colocado o arch eh necessario criar duas particoes. Uma para o UEFI (EFI System) e outra par o linux (Linux filesystem). Recorrer para a documentacao do arch.
+	# mkfs.ext4 /dev/particao_Linux_filesystem
+		criar o Linux filesystem no formato ext4 cujo eh um formato mais recente e atualizado para esse tipo de situacao 
+	# mkfs.fat -F 32 /dev/particao_efi
+		criar o UEFI, que faz parte do processo do boot
+	# mount /dev/particao_Linux_filesystem /mnt
+		cria um volume para o linux 
+	# mount --mkdir /dev/particao_efi /mnt/boot
+		cria uma volume para o UEFI
+	OBS: para definir os melhores servidores para baxiar os pacotes do pacman, eh necessario utilizar o reflector para encontrar esse tipo de pacote  
+	# vim /etc/pacman.d/mirrorlist
+		visualizar quais servidores vai ser estabelecido conexao e qual sera a ordem para cada um das conexoes decresente (tentara no primerio servidor e se nao conseguir resultado ira para o proximo da lista)
+	# reflactor --verbose --country BR,CL,PY,CO,US --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+		vai procurar os servidores nestes paises organizar por ordem decrecente
+	OBS: sugestao de projeto, fazer um script para automatizar o reflector para cada rede, afim de obter a melhor rota possivel 
+	# sudo pacstrap -K /mnt base linux linux-firmware amd-ucode nvidia nvidia-settings networkmanager vim sof-firmware man-db man-pages texinfo
+		baixando com placa da nvidia e amd
+	# sudo pacstrap -K /mnt base linux linux-firmware intel-ucode networkmanager vim sof-firmware man-db man-pages texinfo	
+		baixando sem placa de nvidia e intel
+	# genfstab -U /mnt >> /mnt/etc/fstab
+		esse comando eh fundamental para identificar os discos do computador para garantir que o file system esteja correto 
+	# arch-chroot /mnt
+		muda o root para a particao /mnt
+	# ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
+		tem o proposito de deixar legivel para humanos
+	# hwlock --systohc
+		gere o arquivo /etc/adjtime
+	OBS: editar o arquivo /etc/locale.gen para colocar a regiao e a lingua para formatacao adequada. Ou usar esses comandos (eles tiram os comentarios das linhas)
+		# sed -i 's/^#pt_BR.UTF-8/pt_BR.UTF-8/' /etc/locale.gen
+		# sed -i 's/^#en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen
+	# locale-gen
+		gera os locales
+	# echo "LANG=<idioma>" > /etc/locale.gen
+		define o idioma principal do sistema
+	# echo "KEYMAP=<lang>" > /etc/vconsole.conf
+		define o layout do teclado
+	# echo <hostname> > /etc/hostname
+		define o hostname para o computador
+	# systemctl enable NetworkManager
+		habilita o servico de rede
+	# passwd
+		define uma senha para o root
+	# pacman -S grub efibootmgr
+		instala o bootloader para o sistema
+	# grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=ARCH
+		instala o grub no disco
+	# grub-mkconfig -o /boot/grub/grub.cfg
+		gera o arquivo de configuracao do grub
+	# exit
+		sair do modo chroot
+	# umount -R /mnt
+		desmonta as particoes de modo seguro
+	# reboot
+		reinciar e vuala
+	OBS: agora basta logar com o usuario root (o unico criado) :P
+
+
+
