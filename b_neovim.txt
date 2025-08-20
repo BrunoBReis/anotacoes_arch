@@ -1,0 +1,7 @@
+Objetivo
+  baixar o neovim
+  configurar o neovim
+----
+=====baixar o neovim=====
+$ sudo pacman -S neovim
+  baixar
