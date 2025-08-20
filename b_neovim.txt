@@ -4,4 +4,112 @@ Objetivo
 ----
 =====baixar o neovim=====
 $ sudo pacman -S neovim
-  baixar
+  baixar o neovim
+$ sudo pacman -S python-pynvim
+  existem alguns modulos do neovim que utilizam python, portanto eh interessante baixar esse arquivo
+  mas antes eh crucial ja ter baixado PYTHON
+$ echo "alias vim=nvim" >> ~/.bashrc
+  cria um alias para fazer a chamada do neovim pelo vim
+=========================
+
+=====configurar o neovim=====
+$ mkdir -p ~/.config/nvim/
+  criar o ambiente de configuracao do neovim
+com a pasta do nvim definir
+  o tipo de arquitetura de arquivos
+  quias sao os comandos da inicializacao init.lua
+  quais seram os padroes do nvim
+sugestao de arquitetura dos arquivos (gerado pelo gemini)
+  ~/.config/nvim/
+  ├── init.lua          -- (Será totalmente reescrito)
+  |
+  └── lua/
+      ├── core/
+      │   ├── options.lua   -- (Substituto do options.vim)
+      │   ├── keymaps.lua   -- (Antigo mappings.lua)
+      │   └── globals.lua   -- (Antigo globals.lua)
+      │
+      └── plugins/
+          ├── ... (Um arquivo .lua para cada plugin)
+sugestao de lua.init
+  -- bootstrap
+
+  -- otimizacao de performance
+  -- cria um cache dos modulos lua
+  -- inicializacao mais rapida
+  vim.loader.enable()
+
+  -- define global leader
+  vim.g.mapleader = " " -- espaco
+  vim.g.maplocalleader = "\\"
+
+  -- lazy vim
+  -- copied from lazy.nvim docs
+  local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+  if not (vim.uv or vim.loop).fs_stat(lazypath) then
+    local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+    local out = vim.fn.system({
+      "git", "clone", "--filter=blob:none", "--branch=stable",
+      lazyrepo, lazypath,
+    })
+    if vim.v.shell_error ~= 0 then
+      vim.api.nvim_echo({
+        { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+        { out, "WarningMsg" },
+        { "\nPress any key to exit..." },
+      }, true, {})
+      vim.fn.getchar()
+      os.exit(1)
+    end
+  end
+  vim.opt.rtp:prepend(lazypath)
+
+  -- carrega configuracoes centrais
+  require("core.options")
+  require("core.globals")
+  require("core.keymaps")
+
+  -- configura e carrega os plugins
+  require("lazy").setup({
+    spec = {
+      { import = "plugins" },
+    },
+    checker = {
+      enabled = true, -- verifica atualizacaoes automaticamente
+      notify = false,
+    },
+    change_detection = {
+      notify = false, -- recarregar o nvim automaticamente apos salvar um arquivo de plugin  
+    },
+  })
+sugestao de configuracoes do nvim
+  local opt = vim.opt
+
+  -- aparencia
+  opt.number = true		          -- mostra numero de linhas 
+  opt.relativenumber = true	    -- number de linha relativos
+  opt.termguicolors = true	    -- habilita cores no termial
+
+  -- indentacao
+  opt.tabstop = 2			          -- tamanho do tab em espacos
+  opt.shiftwidth = 2		        -- tamanho da indetacao automatica
+  opt.expandtab = true		      -- usa espacos em vez de tabs
+  opt.autoindent = true		      -- indentacao automatica
+
+  -- comportamento
+  opt.clipboard = "unnamedplus"	-- usa area de transferencia do sistema
+  opt.ignorecase = true		      -- ignora Mm na busca
+  opt.smartcase = true		      -- a menos que a busca contenha uma letra M
+  opt.wrap = false		          -- nao quebrar linhas longas
+  -- opt.mouse = "a"			      -- habilita o uso de mouse
+
+  print("loaded options")
+=============================
+Referencias
+  - https://github.com/neovim/neovim/blob/master/INSTALL.md#arch-linux
+    guia de instalacao da documentacao oficial
+  - gemini
+  - https://github.com/jdhao/nvim-config
+    repositorio de uma configuracao nvim
+  - https://lazy.folke.io/installation
+    docs da documentacao lazy

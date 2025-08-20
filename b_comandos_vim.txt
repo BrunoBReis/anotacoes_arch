@@ -3,3 +3,4 @@ OBJETIVO
 ---
 :Ex -> entrar no modo de explorador do vim
 :nowlsearch -> desliga o whighlight serach
+<shift k> -> manual para a palavra selecionada
