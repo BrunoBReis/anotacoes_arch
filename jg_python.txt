@@ -1,0 +1,52 @@
+ --- Instalação do python ---
+
+ -- Configuração inicial do Ambiente --
+
+$ sudo pacman -S python
+
+ Para trabalhar com projetos com diferentes versões de python, recomenda-se baixar os pacotes de "base-devel" e "git", para baixar o "yay" que gerencia downloads de pacotes AUR (Arch Users Repository)
+
+	$ sudo pacman -S base-devel git
+	%% Navegar para uma pasta temporária
+	$ cd /tmp
+	$ git clone https://aur.archlinux.org/yay.git
+	$ cd yay
+	$ makepkg -si
+
+$ yay -S pyenv
+ 
+ Baixar o pacote pyenv para gerenciar diferentes versões de python
+
+$ echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+$ echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc 
+$ echo 'eval "$(pyenv init --path)"' >> ~/.bashrc
+
+ Coloca o diretório "~/.pyenv/shims" no início da variável de ambiente PATH, onde contém pequenos scripts executáveis para cada comando do python. Desta forma ajuda a direcionar o comando para a versão de python escolhida e não apenas a versão do python geral do sistema.
+
+$ source ~/.bashrc
+
+ Atualiza o terminal
+
+ -- Fluxo de trabalho recomendado --
+
+ Crie diretórios para cada projeto que utilizará python
+ 
+$ pyenv install --list
+
+ Lista as versões de python disponíveis para instalação
+
+$ pyenv install <versão desejada>
+
+$ pyenv local <versão desejada>
+
+ Cria um arquivo ".python-version" no diretório atual, utilizado pelo shims.
+
+$ python -m venv .venv
+$ source .venv/bin/activate
+
+ Prepata o ambiente virtual venv e ativa ele. É recomendado utilizar ambientes virtuais antes de de baixar qualquer pacote para um projeto, desta forma se evita conflitos de versões de pacotes.
+
+$ echo ".venv/" > .gitignore
+
+ Bom hábito para adicionar a regra de ignorar o diretório .venv ao usar o projeto com repositórios git.
+

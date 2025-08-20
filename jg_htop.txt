@@ -1,0 +1,6 @@
+ --- Monitor de Processos Interativos ---
+
+$ sudo pacman -S htop
+
+ Pacote para gerenciar o funcionamento dos processos no notebook, utilização de memória e uso dos núcleos do processador.
+

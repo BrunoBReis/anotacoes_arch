@@ -1,0 +1,17 @@
+ --- Configurações da linguagem do teclado com Sway ---
+
+Ir nas configurações do sway
+
+$ vim .config/sway/config
+
+Adicionar essa linha para configuração:
+
+# --- Configuração do Teclado ---
+# Layout ABNT2 para todos os teclados
+input type:keyboard {
+    xkb_layout br
+    xkb_model abnt2
+}
+
+Salvar o arquivo e fazer SUPER + Shift + c para carrefar as configurações do Sway.
+

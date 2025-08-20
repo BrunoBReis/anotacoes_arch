@@ -1,0 +1,47 @@
+ --- Configuração Bluetooth ---
+
+$ sudo pacman -S bluez bluez-utils
+
+ O pacote "bluez" gerencia o hardware e os protocolos de comunicação. O pacote bluez-utils fornece utilitários de linha de comando, incluindo a ferramenta bluetoothctl para conexão do usuário por linha de comando.
+
+$ sudo systemctl enable bluethooth.service
+
+ Habilita o serviço para iniciar automaticamente com o boot do sistema.
+
+$ sudo systemctl start bluetooth.service
+$ sudo sysyemctl stop bluetooth.service
+
+ Liga e desliga o serviço imediatamente na sessão atual.
+
+$ bluetoothctl
+
+ Abre o ambiente para configurar os dispositivos
+
+[bluetooth]# scan on
+
+ Scaneia por dispositivos. Aparecerá uma lista de endereçis MAC, o qual é utilizado para conexão.
+ 
+[bluetooth]# devices
+
+ Mostra uma lista dos dispositivos, de forma mais limpa.
+
+[bluetooth]# pair [endereço_MAC]
+
+ Faz o pareamento com o dispositivo. Neste ambiente tem o autocompletar, então pode usar o [Tab].
+
+[Bluetooth]# trust [endereço_MAC]
+
+ Atribui o dispositivo bluetooth como confiável e fica salvo na lista de dispositivos que podem ser conectados.
+
+[bluetooth]# connect [endereço_MAC]
+
+ Se conecta ao dispositivo. Ao ligar o dispositivo novamente a conexão será feita automaticamente, caso o dispositivo seja o último.
+
+[bluetooth]# select [endereço_MAC]
+
+ Seleciona o dispositivo para fazer alterações desejadas.
+
+[bluetooth]# set-alias "nome_desejado"
+
+ Define um alias para o dispositivo.
+
