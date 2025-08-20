@@ -1,0 +1,30 @@
+problema
+	como eu posso fazer para pegar uma informacao especifica de um output?
+	como eu posso fazer para pegar o UUID do comando
+		$ nmcli connection show
+quebrando passo a passo
+1. identificar como que eh a saida
+input
+	$ nmcli connection show
+output
+	NAME            UUID                                  TYPE      DEVICE 
+	Bruno’s iPhone  a7244832-b46a-43d4-981c-bde893e27c7d  wifi      wlp2s0 
+	lo              01572097-3d9a-48d3-911f-73eee25ab4d4  loopback  lo     
+	CLARO_5G1E8864  fe8a81fb-4e77-4295-86df-393458fd456c  wifi      --     
+	Joao Ga.        6ec00bca-ef63-449e-8efb-b6afcebc237d  wifi      --     
+	moreia          bb2b5c44-33c4-45a9-b97e-07df09153189  wifi      --     
+	UNB Wireless    a70f1117-b0f4-4acd-a0c8-fbbc3a2e52b9  wifi      --     
+2. fazer uma primeira filtragem basica
+input
+	$ nmcli connection show | grep Bruno
+output
+	Bruno’s iPhone  a7244832-b46a-43d4-981c-bde893e27c7d  wifi      wlp2s0 
+3. fazer uma nova filtragem com o awk
+input
+	$ nmcli connection show | grep Bruno | awk '{print $3}'
+output	
+	a7244832-b46a-43d4-981c-bde893e27c7d
+4. colocar na area de trasnferencia
+input
+	$ nmcli connection show | grep Bruno | awk '{print $3}' | wl-copy
+----
