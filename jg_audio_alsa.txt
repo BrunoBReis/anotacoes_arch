@@ -1,0 +1,47 @@
+ --- Verificar a versão do kernel linux ---
+
+$ sudo pacman -S alsa-utils
+
+ Baixar a ALSA que é a ponte entre os hardwares de som e os softwares
+
+$ aplay -l
+
+ Listar todos os dispositivos de reprodução que o ALSA encontrar no computador
+
+$ uname -r
+
+ --- Atualizar e configurar o áudio ---
+
+$ alsamixer
+
+ Controla a placa de som principal. Usado para visualizar os dispositivos de áudio do computador e configurar se desejado. (F6 abre a seleção da placa de som)
+
+$ sudo alsactl store
+ 
+ Salvar as alterações feitas no alsamixer
+
+
+$ speaker-test -c 2 -D hw:1,0
+
+ Testar os autofalantes nos dois canais na placa 1, dispositivo 0 (seguindo o $ aplay -l). Se estiver tudo certo até esse ponto é possível seguir para configurar o servidor de som, o qual gerencia o som em alto nível.
+
+$ sudo pacman -S pipewire pipewire-pulse pipewire-alsa wireplumber
+
+ Istala o PipeWire e suas dependências para configurar corretamente o gerenciamento de áudio no computador.
+	pipewire: Servidor principal. Transformas vários canais de áudio e apenas um canal para enviar para o hardware.
+	pipewire-pulse: Camada de compatibilidade. "Engana" os aplicativos que tem compatibilidade com PulseAudio para funcionar com o PipeWire.
+	pipewire-alsa: Plugin de configuração para o ALSA. Configura o ALSA para ver o PipeWire como seu dispositivo padrão. Impede que alguns aplicativos tentem se comunicar diretamente com o ALSA. 
+	wireplumber: Gerenciador de sessão e políticas. Gerenciador de sessão que trabalha de forma inteligente para o gerenciamento de áudio funcionar de forma automática.
+
+$ systemctl --user --now enable pipewire.service
+
+ Inicia imediatamente o serviço central do PipeWire para o seu usuário e o configura para iniciar automaticamente em todos os futuros logins. Este é o "motor principal" do sistema de som.
+
+$ systemctl --user --now enable pipewire-pulse.service
+
+ Inicia imediatamente o serviço de compatibilidade com PulseAudio e o configura para iniciar automaticamente. Este serviço cria o "ambiente PulseAudio falso" que permite que os aplicativos de desktop (como o Chrome) enviem som para o PipeWire.
+
+$ systemctl --user --now enable wireplumber.service
+
+ Inicia imediatamente o gerenciador de sessão Wireplumber e o configura para iniciar automaticamente. Este serviço é o "cérebro lógico" que gerencia seus dispositivos e toma decisões automáticas, como trocar a saída para um fone de ouvido quando ele é conectado.
+ 

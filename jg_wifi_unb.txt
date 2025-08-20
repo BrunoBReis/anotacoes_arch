@@ -1,0 +1,8 @@
+ --- Conectando Wifi UnB ---
+
+$ sudo nmcli con add type wifi con-name <UNB Wireless> ifname wlp4s0 ssid <UNB Wireless> -- wifi-sec.key-mgmt wpa-eap 802-1x.eap peap 802-1x.phase2-auth mschapv2 802-1x.identity <200020480>
+
+$ nmcli connection up "nome_rede" --ask
+
+sudo nmcli con add type wifi con-name "UNB Wireless" ifname wlp4s0 ssid "UNB Wireless" -- wifi-sec.key-mgmt wpa-eap 802-1x.eap peap 802-1x.phase2-auth mschapv2 802-1x.identity "200020480"
+

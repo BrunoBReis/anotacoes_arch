@@ -1,0 +1,6 @@
+ --- Fechamento inesperado de um arquivo com Vim ---
+
+$ rm ~/.cache/vim/<caminho_ate_backup>.swp
+
+ Caso um documento aberto e editado com o vim sofra um fechamento inesperado, automaticamente é salvado um backup. Após a utilização (ou não) do backup, o arquivo .swp por de removido.
+
