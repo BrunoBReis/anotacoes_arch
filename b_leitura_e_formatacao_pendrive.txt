@@ -1,0 +1,12 @@
+para ler o pedrive basta
+$ lsblk
+  isso para identificar qual eh a particao do pendrive
+$ sudo mkdir /media/novo_nome
+  cria uma nova pasta para o media
+$ sudo mount /dev/path_do_lsblk_n /media/novo_nome
+  cria um novo volume para o pendrive
+para liberar espaco do pendrive
+$ sudo umount /dev/path_do_lsblk_n
+  perder a referencia do disco
+$ sudo mkfs.ext4 /dev/path_do_lsblk_n
+  faz a formatacao do pendrive no formato ext4
