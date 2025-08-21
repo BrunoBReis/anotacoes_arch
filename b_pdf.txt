@@ -1,0 +1,6 @@
+Problema
+  como eu posso visualizar o pdf fora do google chrome
+---
+zathura eh uma opcao que utiliza o vim motion para navegacao
+$ sudo pacman -S zathura-pdf-mupdf tesseract-data-por tesseract-data-eng
+  baixa o zathura pelo pacman e um convertor de texto para pdf em portugues e o ingles
